@@ -1,0 +1,56 @@
+.banner-card {
+    height: 70vh;
+    border: none;
+}
+
+.banner-card > img {
+    height: 100%;
+    width: 100%;
+    object-fit: fill;
+    border-radius: 0;
+    position: relative;
+}
+
+.banner-title {
+    position: absolute;
+    top: 77%;
+    left: 2%;
+    color: white;
+}
+
+.banner-text {
+    width: 55%;
+    height: 4rem;
+    position: absolute;
+    top: 85%;
+    left: 2%;
+    color: white;
+    overflow: hidden;
+    /*Also option to make it scroll, will see later*/
+}
+
+.card-text::-webkit-scrollbar {
+    display: none;
+}
+
+.loader {
+    height: 70vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media screen and (max-width:760px){
+    .banner-card {
+        height: 35vh;
+    }
+
+    .banner-text {
+        display: none;
+    }
+
+    .banner-title {
+        display: none;
+    }
+}
