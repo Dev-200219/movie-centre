@@ -28,8 +28,8 @@ class Banner extends React.Component {
                 <p className="card-text banner-text">{`${this.state.bannerMovie.overview}`}</p>
             </div> : 
             <div className="loader">
-                <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
+                <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
                 </div>
             </div>
         )

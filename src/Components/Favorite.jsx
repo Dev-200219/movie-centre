@@ -30,11 +30,11 @@ class Favorite extends React.Component {
                     <div className="col-3 genre-list-cont">
                         <ul className="list-group">
                             {
-                                this.state.genres.map((genre) => {
+                                this.state.genres.map((genre, idx) => {
                                     return (
                                         this.state.currGenre === genre ?
-                                        <li className="list-group-item active" onClick={() => this.changeGenre(genre)}>{`${genre}`}</li> : 
-                                        <li className="list-group-item" onClick={() => this.changeGenre(genre)}>{`${genre}`}</li> 
+                                        <li className="list-group-item active" key={idx} onClick={() => this.changeGenre(genre)}>{`${genre}`}</li> : 
+                                        <li className="list-group-item" key={idx} onClick={() => this.changeGenre(genre)}>{`${genre}`}</li> 
                                     )
                                 })
                             }
@@ -81,11 +81,11 @@ class Favorite extends React.Component {
 
                             <nav aria-label="Page navigation example">
                                 <ul className="pagination">
-                                    <li className="page-item"><a className="page-link">Previous</a></li>
-                                    <li className="page-item"><a className="page-link">1</a></li>
-                                    <li className="page-item"><a className="page-link">2</a></li>
-                                    <li className="page-item"><a className="page-link">3</a></li>
-                                    <li className="page-item"><a className="page-link">Next</a></li>
+                                    <li className="page-item"><button className="page-link">Previous</button></li>
+                                    <li className="page-item"><button className="page-link">1</button></li>
+                                    <li className="page-item"><button className="page-link">2</button></li>
+                                    <li className="page-item"><button className="page-link">3</button></li>
+                                    <li className="page-item"><button className="page-link">Next</button></li>
                                 </ul>
                             </nav>
                         </div>
