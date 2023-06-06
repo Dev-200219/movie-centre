@@ -9,7 +9,9 @@ class Favorite extends React.Component {
             favMovies : [],
             currGenre : 'All Genre',
             genres : [],
-            currText : ''
+            currText : '',
+            rowsPerPage : 5,
+            currPage : 1,
         }
     }
 
@@ -37,6 +39,7 @@ class Favorite extends React.Component {
         
         this.setState({
             currGenre : genre,
+            currPage : 1
         })
     }
 
@@ -72,6 +75,45 @@ class Favorite extends React.Component {
         })
     }
 
+    handleRows = (e) => {
+        if(!Number(e.currentTarget.value) || Number(e.currentTarget.value) <= 0) {
+            alert(`Not a valid value for rows`);
+            return;
+        }
+
+        this.setState({
+            rowsPerPage : e.currentTarget.value
+        })
+    }
+
+    goToNextPage = (pagesArr) => {
+        let newPage = this.state.currPage + 1;
+        if(newPage > pagesArr.length) {     
+            
+        }
+        else {
+            this.setState({
+                currPage : this.state.currPage + 1,
+            })
+        }
+    }
+
+    goToPrevPage = () => {
+        let newPage = this.state.currPage - 1;
+        if(newPage >= 1) {
+            this.setState({
+                currPage : this.state.currPage - 1,
+            })
+        }
+    }
+
+    goToCurrPage = (e) => {
+        let newPage = Number(e.currentTarget.id.split('-')[2]);
+        this.setState({
+            currPage : newPage,
+        })
+    }
+
     sortDesc = (property) => {
         let sortedArr = this.state.favMovies;
         sortedArr.sort((a, b) => {
@@ -95,22 +137,33 @@ class Favorite extends React.Component {
     }
 
     render() {
+        let genreids = keys.genreids;
+        let genres = this.state.genres;
+
         let favoriteMovies = this.state.favMovies.filter((movie) => {
-            return keys.genreids[movie.genre_ids[0]] === this.state.currGenre || this.state.currGenre === 'All Genre';
+            return genreids[movie.genre_ids[0]] === this.state.currGenre || this.state.currGenre === 'All Genre';
         });
 
         favoriteMovies = favoriteMovies.filter((movie) => {
             return movie.title.toLowerCase().includes(this.state.currText.toLowerCase());
         })
 
-        let genres = this.state.genres;
-        let genreids = keys.genreids;
+        let pages = Math.ceil(favoriteMovies.length/this.state.rowsPerPage);
+        let pagesArr = [];
+        
+        for(let i = 1; i <= pages; i++){
+            pagesArr.push(i);
+        }
+
+        let si = (this.state.currPage - 1) * Number(this.state.rowsPerPage);
+        let ei = si + Number(this.state.rowsPerPage);
+        favoriteMovies = favoriteMovies.slice(si, ei);
 
         return (
             genres.length > 0 ?
             <>
                 <div className="row" style={{ width: "100%" }}>
-                    <div className="col-3 genre-list-cont">
+                    <div className="col-md-3 col-sm-12 genre-list-cont">
                         <ul className="list-group">
                             {
                                 genres.map((genre, idx) => {
@@ -124,13 +177,12 @@ class Favorite extends React.Component {
                         </ul>
                     </div>
 
-                    <div className="col-9 mt-5">
+                    <div className="col-md-9 col-sm-4 mt-5">
                         <div className="row">
                             <input type="text" className="col" placeholder="Search" value={this.state.currText} onChange={this.handleSearchBar}/>
-                            <input type="number" className="col" placeholder="Row Count"/>
+                            <input type="number" className="col" placeholder="Row Count" value={this.state.rowsPerPage} onChange={this.handleRows}/>
                         </div>
-                        <div className="row">
-
+                        <div className="row" style={{overflow:'auto'}}>
                             <table className="table">
                                 <thead>
                                     <tr>
@@ -156,7 +208,7 @@ class Favorite extends React.Component {
                                             return (
                                                 <tr key={idx}>
                                                     <th scope="row">
-                                                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}/>
+                                                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} alt = {`${movie.title}`}/>
                                                         {movie.title}
                                                     </th>
                                                     <td>{genreids[movie.genre_ids[0]]}</td>
@@ -172,11 +224,15 @@ class Favorite extends React.Component {
 
                             <nav aria-label="Page navigation example">
                                 <ul className="pagination">
-                                    <li className="page-item"><button className="page-link">Previous</button></li>
-                                    <li className="page-item"><button className="page-link">1</button></li>
-                                    <li className="page-item"><button className="page-link">2</button></li>
-                                    <li className="page-item"><button className="page-link">3</button></li>
-                                    <li className="page-item"><button className="page-link">Next</button></li>
+                                    <li className="page-item" onClick={this.goToPrevPage}><button className="page-link">Previous</button></li>
+                                    {
+                                        pagesArr.map((page) => {
+                                            return (
+                                                <li className="page-item" id={`fav-page-${page}`} key={page} onClick={this.goToCurrPage}><button className="page-link">{`${page}`}</button></li>
+                                            )
+                                        })
+                                    }
+                                    <li className="page-item" onClick={() => this.goToNextPage(pagesArr)}><button className="page-link">Next</button></li>
                                 </ul>
                             </nav>
                         </div>

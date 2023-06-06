@@ -118,7 +118,7 @@ class MovieList extends React.Component {
                             allMovies.map((movie, idx) => {
                                 return (
                                     <div className="card single-movie-card mb-4" key={idx}>
-                                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} className="card-img-top"/>
+                                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} className="card-img-top" alt={`${movie.title}`}/>
                                         <div className="card-body single-card-body">
                                             <h5 className="card-title">{`${movie.title}`}</h5>
                                             <p className="card-text single-card-text">{`${movie.overview}`}</p>
