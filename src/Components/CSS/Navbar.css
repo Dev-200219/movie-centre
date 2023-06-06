@@ -1,0 +1,49 @@
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #a55eea;
+    color: white;
+    cursor: pointer;
+    height: 10vh;
+    gap: 1rem;
+}
+
+.options-container {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.options-container > * {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-container h1 {
+    margin-left: 1rem;
+    margin-top: 0.1rem;
+    align-self: flex-start;
+}
+
+.navbar-container h3 {
+    margin-top: 0.3rem;
+    margin-right: 1rem;
+    align-self: flex-end;
+}
+
+.navbar-container > * {
+    color: white;
+    text-decoration: none;
+}
+
+@media screen and (max-width : 425px){
+    .navbar-container h1{
+        font-size: 1.25rem !important;
+    }
+
+    .navbar-container h3 {
+        font-size: 1rem;
+    }
+}

@@ -3,7 +3,7 @@ import axios from "axios";
 import './CSS/MovieList.css'
 import {keys} from './keys.js'
 
-class MovieList extends React.Component {
+class TVList extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -16,7 +16,7 @@ class MovieList extends React.Component {
 
     componentDidMount(props) {
         //side-effect work
-        axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${this.state.currPage}`).then((moviesData) => {
+        axios.get(`https://api.themoviedb.org/3/trending/tv/day?api_key=${keys.apiKey}&page=${this.state.currPage}`).then((moviesData) => {
             this.setState({
                 movies : [...moviesData.data.results]
             })
@@ -27,7 +27,7 @@ class MovieList extends React.Component {
         let newPage = this.state.currPage + 1;
         let newMovies = [];
         if(newPage > this.state.pagesArr.length) {
-            axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
+            axios.get(`https://api.themoviedb.org/3/trending/tv/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
                 newMovies = moviesData.data.results;
                 
                 //async function
@@ -39,7 +39,7 @@ class MovieList extends React.Component {
             })
         }
         else {
-            axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
+            axios.get(`https://api.themoviedb.org/3/trending/tv/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
                 newMovies = moviesData.data.results;
                 
                 this.setState({
@@ -54,7 +54,7 @@ class MovieList extends React.Component {
         let newPage = this.state.currPage - 1;
         let newMovies = [];
         if(newPage >= 1) {
-            axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
+            axios.get(`https://api.themoviedb.org/3/trending/tv/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
                 newMovies = moviesData.data.results;
 
                 this.setState({
@@ -69,7 +69,7 @@ class MovieList extends React.Component {
         let newPage = Number(e.currentTarget.id);
         let newMovies = [];
 
-        axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
+        axios.get(`https://api.themoviedb.org/3/trending/tv/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
             newMovies = moviesData.data.results;
 
             this.setState({
@@ -107,7 +107,7 @@ class MovieList extends React.Component {
         localStorage.setItem('favorite-movies', JSON.stringify(storageMovies));
     }
     
-    render() {
+    render(props) {
         let allMovies = this.state.movies;
         return (
             allMovies && allMovies.length > 0 ?
@@ -158,4 +158,4 @@ class MovieList extends React.Component {
     }
 }
 
-export default MovieList;
+export default TVList;

@@ -1,5 +1,5 @@
 import React from "react";
-import './Favorite.css'
+import './CSS/Favorite.css'
 import { keys} from "./keys";
 
 class Favorite extends React.Component {
@@ -145,7 +145,8 @@ class Favorite extends React.Component {
         });
 
         favoriteMovies = favoriteMovies.filter((movie) => {
-            return movie.title.toLowerCase().includes(this.state.currText.toLowerCase());
+            let title = movie.title ? movie.title : movie.name;
+            return title.toLowerCase().includes(this.state.currText.toLowerCase());
         })
 
         let pages = Math.ceil(favoriteMovies.length/this.state.rowsPerPage);
@@ -160,7 +161,7 @@ class Favorite extends React.Component {
         favoriteMovies = favoriteMovies.slice(si, ei);
 
         return (
-            genres.length > 0 ?
+            genres.length > 1 ?
             <>
                 <div className="row" style={{ width: "100%" }}>
                     <div className="col-md-3 col-sm-12 genre-list-cont">
@@ -208,8 +209,8 @@ class Favorite extends React.Component {
                                             return (
                                                 <tr key={idx}>
                                                     <th scope="row">
-                                                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} alt = {`${movie.title}`}/>
-                                                        {movie.title}
+                                                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} alt = {`${movie.title ? movie.title : movie.name}`}/>
+                                                        {movie.title ? movie.title : movie.name}
                                                     </th>
                                                     <td>{genreids[movie.genre_ids[0]]}</td>
                                                     <td>{movie.popularity}</td>
@@ -239,7 +240,9 @@ class Favorite extends React.Component {
                     </div>
                 </div>
             </> :
-            <div>Not loaded</div>
+            <div className="no-favorite">
+                <h1>No Item in Favorites</h1>
+            </div>
         )
     }
 }
