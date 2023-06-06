@@ -5,6 +5,10 @@
     cursor: pointer;
 }
 
+table {
+    cursor: pointer;
+}
+
 .genre-list-cont > ul {
     width: 90%;
 }

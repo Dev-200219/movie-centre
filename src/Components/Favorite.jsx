@@ -1,36 +1,119 @@
 import React from "react";
 import './Favorite.css'
-import { movies } from './getMovies'
+import { keys} from "./keys";
 
 class Favorite extends React.Component {
     constructor() {
         super();
         this.state = {
-            genres : ['All Genres', 'Action', 'Comedy', 'Thriller'],
-            currGenre : 'All Genres'
+            favMovies : [],
+            currGenre : 'All Genre',
+            genres : [],
+            currText : ''
         }
+    }
+
+    componentDidMount() {
+        let favoriteMovies = JSON.parse(localStorage.getItem('favorite-movies') || '[]');
+        let favMovieGenre = [];
+
+        favoriteMovies.map((movie) => {
+            if(!favMovieGenre.includes(keys.genreids[movie.genre_ids[0]])) {
+                favMovieGenre.push(keys.genreids[movie.genre_ids[0]])
+            }
+        });
+
+        favMovieGenre.unshift('All Genre');
+
+        this.setState({
+            favMovies : favoriteMovies,
+            currGenre : 'All Genre',
+            genres : favMovieGenre
+        })
     }
 
     changeGenre = (genre) => {
         if(genre === this.state.currGenre) return;
+        
+        this.setState({
+            currGenre : genre,
+        })
+    }
+
+    removeFromFavorite = (movie) => {
+        let newFavMovies = this.state.favMovies.filter((singleMovie) => singleMovie.id !== movie.id)
+        let storageMovies = JSON.parse(localStorage.getItem('favorite-movies') || '[]');
+
+        let favMovieGenre = [];
+
+        newFavMovies.map((movie) => {
+            if(!favMovieGenre.includes(keys.genreids[movie.genre_ids[0]])) {
+                favMovieGenre.push(keys.genreids[movie.genre_ids[0]])
+            }
+        });
+
+        favMovieGenre.unshift('All Genre');
+
+        storageMovies = storageMovies.filter((movieObj) => {
+            return movieObj.id !== movie.id;
+        })
 
         this.setState({
-            currGenre : genre
+            favMovies : [...newFavMovies],
+            genres : favMovieGenre
+        })   
+        
+        localStorage.setItem('favorite-movies', JSON.stringify(storageMovies));
+    }
+
+    handleSearchBar = (e) => {
+        this.setState({
+            currText : e.currentTarget.value
+        })
+    }
+
+    sortDesc = (property) => {
+        let sortedArr = this.state.favMovies;
+        sortedArr.sort((a, b) => {
+            return b[property] - a[property];
+        })
+
+        this.setState({
+            favMovies : sortedArr
+        })
+    }
+    
+    sortAsce = (property) => {
+        let sortedArr = this.state.favMovies;
+        sortedArr.sort((a, b) => {
+            return a[property] - b[property];
+        })
+
+        this.setState({
+            favMovies : sortedArr
         })
     }
 
     render() {
-        let allMovies = movies.results.slice(0, 5);
-        
-        let genreids = { 28: 'Action', 12: 'Adventure', 16: 'Animation', 35: 'Comedy', 80: 'Crime', 99: 'Documentary', 18: 'Drama', 10751: 'Family', 14: 'Fantasy', 36: 'History', 27: 'Horror', 10402: 'Music', 9648: 'Mystery', 10749: 'Romance', 878: 'Sci-fi', 10770: 'TV', 53: 'Thriller', 10752: 'War', 37: 'Western' };
+        let favoriteMovies = this.state.favMovies.filter((movie) => {
+            return keys.genreids[movie.genre_ids[0]] === this.state.currGenre || this.state.currGenre === 'All Genre';
+        });
+
+        favoriteMovies = favoriteMovies.filter((movie) => {
+            return movie.title.toLowerCase().includes(this.state.currText.toLowerCase());
+        })
+
+        let genres = this.state.genres;
+        let genreids = keys.genreids;
 
         return (
+            genres.length > 0 ?
             <>
                 <div className="row" style={{ width: "100%" }}>
                     <div className="col-3 genre-list-cont">
                         <ul className="list-group">
                             {
-                                this.state.genres.map((genre, idx) => {
+                                genres.map((genre, idx) => {
                                     return (
                                         this.state.currGenre === genre ?
                                         <li className="list-group-item active" key={idx} onClick={() => this.changeGenre(genre)}>{`${genre}`}</li> : 
@@ -43,7 +126,7 @@ class Favorite extends React.Component {
 
                     <div className="col-9 mt-5">
                         <div className="row">
-                            <input type="text" className="col" placeholder="Search"/>
+                            <input type="text" className="col" placeholder="Search" value={this.state.currText} onChange={this.handleSearchBar}/>
                             <input type="number" className="col" placeholder="Row Count"/>
                         </div>
                         <div className="row">
@@ -53,15 +136,23 @@ class Favorite extends React.Component {
                                     <tr>
                                         <th scope="col">Title</th>
                                         <th scope="col">Genre</th>
-                                        <th scope="col">Popularity</th>
-                                        <th scope="col">Rating</th>
+                                        <th scope="col"><i className="fa-solid fa-sort-up" onClick={() => {
+                                            this.sortDesc('popularity')
+                                        }}/>Popularity<i className="fa-solid fa-sort-down" onClick={() => {
+                                            this.sortAsce('popularity')
+                                        }}/></th>
+                                        <th scope="col"><i className="fa-solid fa-sort-up" onClick={() => {
+                                            this.sortDesc('vote_average')
+                                        }}/>Rating<i className="fa-solid fa-sort-down" onClick={() => {
+                                            this.sortAsce('vote_average')
+                                        }}/></th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     {
-                                        allMovies.map((movie, idx) => {
+                                        favoriteMovies.map((movie, idx) => {
                                             return (
                                                 <tr key={idx}>
                                                     <th scope="row">
@@ -71,7 +162,7 @@ class Favorite extends React.Component {
                                                     <td>{genreids[movie.genre_ids[0]]}</td>
                                                     <td>{movie.popularity}</td>
                                                     <td>{movie.vote_average}</td>
-                                                    <td><button type="button" className="btn btn-danger">Delete</button></td>
+                                                    <td><button type="button" className="btn btn-danger" onClick={()=>this.removeFromFavorite(movie)}>Delete</button></td>
                                                 </tr>
                                             )
                                         })
@@ -91,7 +182,8 @@ class Favorite extends React.Component {
                         </div>
                     </div>
                 </div>
-            </>
+            </> :
+            <div>Not loaded</div>
         )
     }
 }

@@ -9,11 +9,13 @@ class MovieList extends React.Component {
         this.state = {
             currPage : 1,
             pagesArr : [1],
-            movies : []
+            movies : [],
+            favMovies : [...(JSON.parse(localStorage.getItem('favorite-movies') || '[]')).map((movie)=>movie.id)]
         }
     }
 
     componentDidMount() {
+        //side-effect work
         axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${this.state.currPage}`).then((moviesData) => {
             this.setState({
                 movies : [...moviesData.data.results]
@@ -76,6 +78,34 @@ class MovieList extends React.Component {
             })
         })
     }
+
+    toggleFavorite = (movie) => {
+        let isAlreadyFavorite = this.state.favMovies.includes(movie.id)
+        let newFavMovies = [];
+        let storageMovies = JSON.parse(localStorage.getItem('favorite-movies') || '[]');
+
+        if(isAlreadyFavorite) {
+            newFavMovies = this.state.favMovies.filter((movieID) => movieID !== movie.id)
+            
+            storageMovies = storageMovies.filter((movieObj) => {
+                return movieObj.id !== movie.id;
+            })
+
+            this.setState({
+                favMovies : newFavMovies
+            })    
+
+        }
+        else {
+            newFavMovies = [...this.state.favMovies, movie.id];
+            storageMovies.push(movie);
+            this.setState({
+                favMovies : newFavMovies
+            })
+        }
+
+        localStorage.setItem('favorite-movies', JSON.stringify(storageMovies));
+    }
     
     render() {
         let allMovies = this.state.movies;
@@ -92,7 +122,11 @@ class MovieList extends React.Component {
                                         <div className="card-body single-card-body">
                                             <h5 className="card-title">{`${movie.title}`}</h5>
                                             <p className="card-text single-card-text">{`${movie.overview}`}</p>
-                                            <button className="btn btn-primary">Add to Favorites</button>
+                                            {
+                                                this.state.favMovies.includes(movie.id) ? 
+                                                <button className="btn btn-primary" onClick={() => this.toggleFavorite(movie)}>Remove from Favorites</button>:
+                                                <button className="btn btn-primary" onClick={() => this.toggleFavorite(movie)}>Add to Favorites</button>
+                                            }
                                         </div>
                                     </div>
                                 )
