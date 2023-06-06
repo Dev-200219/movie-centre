@@ -33,3 +33,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.cards-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+    width: 100%;
+}
