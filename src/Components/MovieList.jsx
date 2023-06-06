@@ -1,5 +1,4 @@
 import React from "react";
-import { movies } from './getMovies'
 import axios from "axios";
 import './MovieList.css'
 import {keys} from './keys.js'

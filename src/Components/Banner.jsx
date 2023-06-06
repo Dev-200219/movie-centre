@@ -1,7 +1,6 @@
 import React from "react";
 import './Banner.css'
 import {keys} from './keys.js'
-import {movies} from './getMovies'
 import axios from "axios";
 
 class Banner extends React.Component {
@@ -13,7 +12,7 @@ class Banner extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(`https://api.themoviedb.org/3/trending/movie/week?api_key=${keys.apiKey}&page=1`).then((moviesData) => {
+        axios.get(`https://api.themoviedb.org/3/trending/movie/week?api_key=${keys.apiKey}&page=23`).then((moviesData) => {
             this.setState({
                 bannerMovie : moviesData.data.results[0]
             })

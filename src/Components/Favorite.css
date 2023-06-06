@@ -1,0 +1,19 @@
+.genre-list-cont {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    cursor: pointer;
+}
+
+.genre-list-cont > ul {
+    width: 90%;
+}
+
+th > img {
+    width: 10rem;
+    object-fit: fill;
+}
+
+.row > input {
+    outline: none;
+}
