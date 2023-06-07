@@ -1,10 +1,8 @@
 import './App.css';
 import Navbar from './Components/Navbar';
-import MovieBanner from './Components/MovieBanner';
-import MovieList from './Components/MovieList';
+import Banner from './Components/Banner';
+import List from './Components/List';
 import Favorite from './Components/Favorite';
-import TVList from './Components/TVList';
-import TVBanner from './Components/TVBanner';
 import {BrowserRouter as Router, Route, Routes, Navigate}  from 'react-router-dom';
 
 function App() {
@@ -13,8 +11,8 @@ function App() {
       <Navbar/>
       <Routes>
         <Route exact path='/' element={<Navigate to={'/movie'} replace/>}/>
-        <Route exact path='/tv' element={<><TVBanner type='tv'/><TVList type='tv'/></>}/>
-        <Route exact path='/movie' element={<><MovieBanner type='movie'/><MovieList type='movie'/></>}/>
+        <Route exact path='/tv' element={<><Banner type='tv'/><List type='tv'/></>}/>
+        <Route exact path='/movie' element={<><Banner type='movie'/><List type='movie'/></>}/>
         <Route exact path='/favorites' element={<Favorite/>}/>
       </Routes>
     </Router>

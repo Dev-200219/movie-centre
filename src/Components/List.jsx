@@ -4,8 +4,8 @@ import './CSS/MovieList.css'
 import {keys} from './keys.js'
 
 class MovieList extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             currPage : 1,
             pagesArr : [1],
@@ -16,9 +16,21 @@ class MovieList extends React.Component {
 
     componentDidMount(props) {
         //side-effect work
-        axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${this.state.currPage}`).then((moviesData) => {
+        axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${keys.apiKey}&page=${this.state.currPage}`).then((moviesData) => {
             this.setState({
                 movies : [...moviesData.data.results]
+            })
+        })
+    }
+
+    componentDidUpdate(prevProps) {
+        if(prevProps.type === this.props.type) return;
+        
+        axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${keys.apiKey}&page=1`).then((moviesData) => {
+            this.setState({
+                movies : [...moviesData.data.results],
+                currPage : 1,
+                pagesArr : [1]
             })
         })
     }
@@ -27,7 +39,7 @@ class MovieList extends React.Component {
         let newPage = this.state.currPage + 1;
         let newMovies = [];
         if(newPage > this.state.pagesArr.length) {
-            axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
+            axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
                 newMovies = moviesData.data.results;
                 
                 //async function
@@ -54,7 +66,7 @@ class MovieList extends React.Component {
         let newPage = this.state.currPage - 1;
         let newMovies = [];
         if(newPage >= 1) {
-            axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
+            axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
                 newMovies = moviesData.data.results;
 
                 this.setState({
@@ -69,7 +81,7 @@ class MovieList extends React.Component {
         let newPage = Number(e.currentTarget.id);
         let newMovies = [];
 
-        axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
+        axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${keys.apiKey}&page=${newPage}`).then((moviesData) => {
             newMovies = moviesData.data.results;
 
             this.setState({
@@ -118,7 +130,7 @@ class MovieList extends React.Component {
                             allMovies.map((movie, idx) => {
                                 return (
                                     <div className="card single-movie-card mb-4" key={idx}>
-                                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} className="card-img-top" alt={`${movie.title}`}/>
+                                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} className="card-img-top" alt={`${movie.title ? movie.title : movie.name}`}/>
                                         <div className="card-body single-card-body">
                                             <h5 className="card-title">{`${movie.title ? movie.title : movie.name}`}</h5>
                                             <p className="card-text single-card-text">{`${movie.overview}`}</p>
