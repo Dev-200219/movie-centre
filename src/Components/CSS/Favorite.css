@@ -28,3 +28,9 @@ th > img {
     justify-content: center;
     align-items: center;
 }
+
+@media screen and (max-width : 435px){
+    .mobile-view {
+        margin-left: 12.5px;
+    }
+}

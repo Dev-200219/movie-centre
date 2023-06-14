@@ -178,7 +178,7 @@ class Favorite extends React.Component {
                         </ul>
                     </div>
 
-                    <div className="col-md-9 col-sm-4 mt-5">
+                    <div className="mobile-view col-md-9 col-sm-4 mt-5">
                         <div className="row">
                             <input type="text" className="col" placeholder="Search" value={this.state.currText} onChange={this.handleSearchBar}/>
                             <input type="number" className="col" placeholder="Row Count" value={this.state.rowsPerPage} onChange={this.handleRows}/>

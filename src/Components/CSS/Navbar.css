@@ -39,11 +39,7 @@
 }
 
 @media screen and (max-width : 425px){
-    .navbar-container h1{
-        font-size: 1.25rem !important;
-    }
-
     .navbar-container h3 {
-        font-size: 1rem;
+        font-size: 1rem !important;
     }
 }
