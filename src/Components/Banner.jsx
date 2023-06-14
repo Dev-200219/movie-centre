@@ -1,6 +1,5 @@
 import React from "react";
 import './CSS/Banner.css'
-import {keys} from './keys.js'
 import axios from "axios";
 
 class MovieBanner extends React.Component {
@@ -12,7 +11,7 @@ class MovieBanner extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${keys.apiKey}&page=5`).then((moviesData) => {
+        axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${process.env.REACT_APP_TMBD_API_KEY}&page=5`).then((moviesData) => {
             this.setState({
                 bannerMovies : moviesData.data.results.slice(0, 5)
             })
@@ -23,7 +22,7 @@ class MovieBanner extends React.Component {
     componentDidUpdate(prevProps) {
         if(prevProps.type === this.props.type) return;
         
-        axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${keys.apiKey}&page=5`).then((moviesData) => {
+        axios.get(`https://api.themoviedb.org/3/trending/${this.props.type}/day?api_key=${process.env.REACT_APP_TMBD_API_KEY}&page=5`).then((moviesData) => {
             this.setState({
                 bannerMovies : moviesData.data.results.slice(0, 5)
             })
