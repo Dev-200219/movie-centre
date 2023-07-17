@@ -1,6 +1,6 @@
 # Movie Centre
 
-A simple ReactJS built using the relatively older class-based components and Bootstrap. Using The Movie Database(TMDB) API a list of trending Movies and TV Series is displayed. It also has a favorite section which is persistent as it uses the Browser's Local Storage. In Favorites user can add or remove movies, select them by genre, sort them on rating and many more features.
+A simple ReactJS project built using the relatively older class-based components and Bootstrap. Using The Movie Database(TMDB) API a list of trending Movies and TV Series is displayed. It also has a favorite section which is persistent as it uses the Browser's Local Storage. In Favorites user can add or remove movies, select them by genre, sort them on rating and many more features.
 
 # And the best of all it is completely responsive!!
 
